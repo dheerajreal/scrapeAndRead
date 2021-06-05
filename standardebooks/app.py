@@ -6,12 +6,15 @@ import bs4
 import requests
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DOWNLOAD_DIR = BASE_DIR / "downloads"
+DOWNLOAD_DIR = BASE_DIR / "downloads" / "standardebooks"
+
+if not DOWNLOAD_DIR.exists():
+    DOWNLOAD_DIR.mkdir(parents=True)
 
 
 def generate_filepath(author_name: str = "UNKNOWN", book_name: str = "UNKNOWN"):
     filename = author_name + "-" + book_name + ".epub"
-    filepath = DOWNLOAD_DIR / "standardebooks" / filename
+    filepath = DOWNLOAD_DIR / filename
     return filepath
 
 
@@ -97,10 +100,9 @@ def download_all_ebooks():
         print(f"Downloading {index + 1 } of {number_of_books}")
         print(f"FROM:\n{url}\nTo:\n{filepath}\n")
         downloaded = download_file(url=url, filepath=filepath)
-        downloaded = "SUCCESS" if downloaded else "FAILED"
         print(f"STATUS:\t{downloaded}\n")
         print("Waiting two seconds\n")
-        if downloaded == "SUCCESS":
+        if downloaded:
             time.sleep(2)
 
 
